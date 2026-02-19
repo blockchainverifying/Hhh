@@ -1,0 +1,131 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&display=swap');
+
+:root {
+    --royal-purple: #2e1065;
+    --deep-plum:   #1e1b4b;
+    --gold:        #d4af37;
+    --gold-light:  #f9e2af;
+    --purple-glow: #7c3aed;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    scroll-behavior: smooth;
+}
+
+.brand-font { font-family: 'Cinzel', serif; }
+
+.gold-purple-text {
+    background: linear-gradient(90deg, var(--gold), var(--purple-glow), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200% auto;
+    animation: shine 7s linear infinite;
+}
+
+@keyframes shine { to { background-position: 200% center; } }
+
+.btn-royal {
+    background: linear-gradient(135deg, var(--purple-glow), var(--royal-purple));
+    border: 1px solid rgba(212,175,55,0.4);
+    transition: all 0.4s ease;
+}
+
+.btn-royal:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 0 35px rgba(124,58,237,0.55);
+    border-color: var(--gold);
+}
+
+.product-card {
+    background: rgba(46,16,101,0.12);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(124,58,237,0.22);
+    border-radius: 16px;
+    padding: 1.5rem;
+    transition: all 0.45s cubic-bezier(0.16,1,0.3,1);
+    cursor: pointer;
+}
+
+.product-card:hover {
+    transform: translateY(-12px);
+    border-color: var(--gold);
+    box-shadow: 0 25px 50px -12px rgba(124,58,237,0.35);
+}
+
+.logo-wrap {
+    height: 140px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    transition: all 0.35s;
+}
+
+.product-card:hover .logo-wrap {
+    box-shadow: 0 0 25px rgba(212,175,55,0.18);
+    transform: scale(1.04);
+}
+
+.logo-wrap img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.product-card h4 { font-size: 1.125rem; font-weight: 600; margin-bottom: 0.25rem; }
+.product-card p { color: #a0a0c0; font-size: 0.875rem; margin-bottom: 0.75rem; }
+
+.acquire {
+    color: var(--gold);
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.product-card:hover .acquire { color: var(--gold-light); }
+
+/* Ticker */
+.currency-ticker { animation: ticker-scroll 40s linear infinite; }
+.currency-ticker:hover { animation-play-state: paused; }
+
+@keyframes ticker-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+.currency-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 18px;
+    background: rgba(124,58,237,0.08);
+    border: 1px solid rgba(212,175,55,0.25);
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #d4af37;
+    white-space: nowrap;
+    transition: all 0.3s;
+}
+
+.currency-chip:hover {
+    background: rgba(212,175,55,0.12);
+    border-color: #d4af37;
+    color: #f9e2af;
+    transform: scale(1.05);
+}
+
+/* Modal */
+.modal-overlay { transition: opacity 0.3s ease; }
+.modal-overlay.hidden { opacity: 0; pointer-events: none; }
+.modal-content {
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+.modal-overlay:not(.hidden) .modal-content {
+    transform: translateY(0);
+    opacity: 1;
+}
