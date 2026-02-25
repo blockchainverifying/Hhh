@@ -3,119 +3,269 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PC Remote Dashboard</title>
+    <title>Sainfoxiya | B2B Gift Card Distribution</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        .screenshot-container {
-            cursor: crosshair;
-            position: relative;
-            display: inline-block;
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
         }
-        #dot {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background: red;
-            border-radius: 50%;
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .hero-gradient {
+            background: radial-gradient(circle at top right, #f0f7ff 0%, #ffffff 100%);
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+        }
+
+        .badge-pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .currency-tag {
+            background: #e2e8f0;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        /* Popup Styles */
+        #global-popup {
             display: none;
-            pointer-events: none;
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .popup-content {
+            background: white;
+            width: 100%;
+            max-width: 700px;
+            max-height: 80vh;
+            border-radius: 24px;
+            position: relative;
+            overflow-y: auto;
+            padding: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
         }
     </style>
 </head>
-<body class="bg-gray-900 text-white font-sans p-4">
-    <div class="max-w-5xl mx-auto">
-        <header class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold text-blue-400">💻 PC Dashboard</h1>
-            <div class="space-x-2">
-                <button onclick="refreshImage()" class="bg-blue-600 px-4 py-2 rounded hover:bg-blue-700">🔄 Refresh</button>
-            </div>
-        </header>
+<body class="bg-white text-slate-900">
 
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <!-- Sidebar Controls -->
-            <div class="md:col-span-1 space-y-4">
-                <div class="bg-gray-800 p-4 rounded-lg">
-                    <h2 class="font-bold mb-2 border-b border-gray-700 pb-1">Commands</h2>
-                    <input id="typeInput" type="text" placeholder="Type something..." class="w-full bg-gray-700 p-2 rounded mb-2 text-sm outline-none border border-gray-600 focus:border-blue-500">
-                    <button onclick="sendType()" class="w-full bg-green-600 py-2 rounded text-sm hover:bg-green-700">⌨️ Send Text</button>
+    <!-- Navigation -->
+    <nav class="glass-nav fixed w-full z-50 top-0">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold tracking-tight text-blue-600 uppercase">SAINFOXIYA</span>
                 </div>
-                
-                <div class="bg-gray-800 p-4 rounded-lg">
-                    <h2 class="font-bold mb-2 border-b border-gray-700 pb-1">Info</h2>
-                    <p class="text-xs text-gray-400">Image par click karein PC par click karne ke liye.</p>
-                    <div id="coords" class="mt-2 text-blue-300 text-sm">X: 0, Y: 0</div>
+                <div class="hidden md:flex space-x-8 font-medium text-sm uppercase tracking-wider">
+                    <a href="#home" class="hover:text-blue-600 transition">Home</a>
+                    <a href="#cards" class="hover:text-blue-600 transition">Gift Cards</a>
+                    <a href="#partnership" class="hover:text-blue-600 transition text-blue-600 font-bold">Partner With Us</a>
                 </div>
             </div>
+        </div>
+    </nav>
 
-            <!-- Main Screen -->
-            <div class="md:col-span-3">
-                <div class="bg-gray-800 p-2 rounded-lg text-center overflow-auto">
-                    <div class="screenshot-container" id="container">
-                        <!-- Yahan apna GitHub screenshot URL dalein -->
-                        <img id="screenshot" src="screenshot.png" alt="Loading PC Screen..." class="max-w-full h-auto rounded shadow-2xl border border-gray-700">
-                        <div id="dot"></div>
+    <!-- Hero Section -->
+    <section id="home" class="hero-gradient pt-32 pb-20 px-4">
+        <div class="max-w-7xl mx-auto text-center">
+            <span class="inline-block py-1 px-3 bg-blue-50 text-blue-700 text-xs font-bold rounded-full mb-6 uppercase tracking-widest text-sm">Premium B2B Solutions</span>
+            <h1 class="text-4xl md:text-6xl font-bold text-slate-900 mb-6 leading-tight">
+                Empowering Businesses with <br><span class="text-blue-600">Global Gift Card Infrastructure</span>
+            </h1>
+            <p class="text-lg text-slate-600 max-w-2xl mx-auto mb-10">
+                Sainfoxiya provides seamless API integration and bulk purchasing for global gift cards. Partner with us to scale your digital inventory across multiple regions.
+            </p>
+            
+            <div class="mb-10 flex flex-wrap justify-center gap-4">
+                <div class="bg-blue-600 text-white px-6 py-3 rounded-full font-bold shadow-lg badge-pulse flex items-center gap-2">
+                    <i class="fas fa-layer-group"></i>
+                    1000+ Gift Cards
+                </div>
+                <div class="bg-slate-900 text-white px-6 py-3 rounded-full font-bold flex items-center gap-3">
+                    <span class="text-xs opacity-70 uppercase">Supported:</span>
+                    <span class="text-sm">INR</span>
+                    <span class="opacity-30">|</span>
+                    <span class="text-sm">USD</span>
+                    <span class="opacity-30">|</span>
+                    <span class="text-sm">AED</span>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#partnership" class="px-8 py-4 bg-slate-900 text-white rounded-lg font-semibold hover:bg-slate-800 transition shadow-lg">Become a Partner</a>
+                <a href="#cards" class="px-8 py-4 bg-white border border-slate-200 text-slate-700 rounded-lg font-semibold hover:bg-slate-50 transition">View Catalog</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Brands Section -->
+    <section id="cards" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4">Top Global Brands</h2>
+                <p class="text-slate-500">Access our massive catalog of gaming, entertainment, and e-commerce cards.</p>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <!-- Apple -->
+                <div class="bg-slate-50 p-8 rounded-2xl flex flex-col items-center card-hover text-center relative">
+                    <div class="absolute top-4 right-4 flex gap-1">
+                        <span class="currency-tag">INR</span><span class="currency-tag">USD</span>
+                    </div>
+                    <i class="fab fa-apple text-4xl mb-4"></i>
+                    <h3 class="font-bold">Apple Gift Card</h3>
+                    <p class="text-xs text-blue-600 font-semibold mt-2">App Store & Music</p>
+                </div>
+                <!-- Binance -->
+                <div class="bg-slate-50 p-8 rounded-2xl flex flex-col items-center card-hover text-center relative">
+                    <div class="absolute top-4 right-4 flex gap-1">
+                        <span class="currency-tag">USDT</span><span class="currency-tag">AED</span>
+                    </div>
+                    <i class="fas fa-coins text-4xl mb-4 text-yellow-500"></i>
+                    <h3 class="font-bold">Binance Gift Card</h3>
+                    <p class="text-xs text-blue-600 font-semibold mt-2">Instant Crypto Redeem</p>
+                </div>
+                <!-- PUBG -->
+                <div class="bg-slate-50 p-8 rounded-2xl flex flex-col items-center card-hover text-center relative">
+                    <div class="absolute top-4 right-4 flex gap-1">
+                        <span class="currency-tag">GLOBAL</span>
+                    </div>
+                    <i class="fas fa-gamepad text-4xl mb-4 text-orange-500"></i>
+                    <h3 class="font-bold">PUBG Mobile</h3>
+                    <p class="text-xs text-blue-600 font-semibold mt-2">UC Topup/Codes</p>
+                </div>
+                <!-- Razer -->
+                <div class="bg-slate-50 p-8 rounded-2xl flex flex-col items-center card-hover text-center relative">
+                    <div class="absolute top-4 right-4 flex gap-1">
+                        <span class="currency-tag">INR</span><span class="currency-tag">USD</span>
+                    </div>
+                    <i class="fas fa-bolt text-4xl mb-4 text-green-500"></i>
+                    <h3 class="font-bold">Razer Gold</h3>
+                    <p class="text-xs text-blue-600 font-semibold mt-2">Bulk PINs Available</p>
+                </div>
+                <!-- Steam -->
+                <div class="bg-slate-50 p-8 rounded-2xl flex flex-col items-center card-hover text-center relative">
+                    <div class="absolute top-4 right-4 flex gap-1">
+                        <span class="currency-tag">AED</span><span class="currency-tag">USD</span>
+                    </div>
+                    <i class="fab fa-steam text-4xl mb-4 text-slate-700"></i>
+                    <h3 class="font-bold">Steam Wallet</h3>
+                    <p class="text-xs text-blue-600 font-semibold mt-2">Regional & Global</p>
+                </div>
+                <!-- PSN -->
+                <div class="bg-slate-50 p-8 rounded-2xl flex flex-col items-center card-hover text-center relative">
+                    <div class="absolute top-4 right-4 flex gap-1">
+                        <span class="currency-tag">INR</span><span class="currency-tag">AED</span>
+                    </div>
+                    <i class="fab fa-playstation text-4xl mb-4 text-blue-700"></i>
+                    <h3 class="font-bold">PlayStation</h3>
+                    <p class="text-xs text-blue-600 font-semibold mt-2">Store Credits</p>
+                </div>
+            </div>
+            
+            <div class="mt-16 text-center">
+                <p class="text-slate-600 italic">...and 1,000+ more across all major digital categories.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Partnership Section -->
+    <section id="partnership" class="py-20 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl font-bold mb-6 text-slate-900">Partner with Sainfoxiya</h2>
+                    <p class="text-slate-600 mb-8">Join India's most reliable B2B gift card network. Start your journey with automated delivery and best-in-market pricing.</p>
+                    <ul class="space-y-4">
+                        <li class="flex items-center gap-3 text-slate-700 font-medium"><i class="fas fa-check-circle text-blue-600"></i> Instant Wholesale Access</li>
+                        <li class="flex items-center gap-3 text-slate-700 font-medium"><i class="fas fa-check-circle text-blue-600"></i> API Documentation Ready</li>
+                        <li class="flex items-center gap-3 text-slate-700 font-medium"><i class="fas fa-check-circle text-blue-600"></i> Dedicated Support Manager</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-100">
+                    <div class="space-y-4">
+                        <input type="text" placeholder="Full Name / Company Name" class="w-full p-4 rounded-xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-blue-600 outline-none">
+                        <input type="email" placeholder="Business Email" class="w-full p-4 rounded-xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-blue-600 outline-none">
+                        <button class="w-full py-4 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition">Apply Now</button>
                     </div>
                 </div>
             </div>
         </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-white py-16 px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-3 gap-12 mb-12 border-b border-slate-800 pb-12">
+                <div class="col-span-1 md:col-span-1">
+                    <h2 class="text-2xl font-bold text-blue-400 mb-4 uppercase">SAINFOXIYA</h2>
+                    <p class="text-slate-400">Premium B2B Gift Card Distribution. Secure, reliable, and global.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-6 text-slate-500 uppercase text-xs tracking-widest">Legal & Info</h4>
+                    <ul class="space-y-4">
+                        <li><button onclick="openPopup('privacy')" class="text-slate-400 hover:text-white transition">Privacy Policy</button></li>
+                        <li><button onclick="openPopup('whatsapp')" class="text-green-400 hover:text-green-300 font-bold transition flex items-center gap-2"><i class="fab fa-whatsapp"></i> Whatsapp Support</button></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-6 text-slate-500 uppercase text-xs tracking-widest">Support & Sales</h4>
+                    <ul class="space-y-4">
+                        <li><button onclick="openPopup('help')" class="text-slate-400 hover:text-white transition">Help Centre</button></li>
+                        <li><button onclick="openPopup('merchant')" class="text-slate-400 hover:text-white transition">Merchant Login</button></li>
+                        <li><button onclick="openPopup('sales')" class="text-blue-400 hover:text-blue-300 font-bold transition">Contact Sale</button></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="text-center text-slate-500 text-sm">
+                <p>&copy; 2024 Sainfoxiya. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Dynamic Popup Container -->
+    <div id="global-popup">
+        <div class="popup-content">
+            <button onclick="closePopup()" class="absolute top-6 right-6 text-slate-400 hover:text-slate-900 transition text-2xl">
+                <i class="fas fa-times"></i>
+            </button>
+            <div id="popup-inner-content">
+                <!-- Content injected from script.js -->
+            </div>
+        </div>
     </div>
 
-    <script>
-        const BOT_TOKEN = "8235734619:AAEVmjaTSbPBvzKZJuyCOgxXvOb_m5ILWxo";
-        const CHAT_ID = "8060968649";
-        const img = document.getElementById('screenshot');
-        const container = document.getElementById('container');
-        const dot = document.getElementById('dot');
-
-        // Automatic image refresh every 30 seconds
-        setInterval(refreshImage, 30000);
-
-        function refreshImage() {
-            img.src = "screenshot.png?t=" + new Date().getTime();
-        }
-
-        container.addEventListener('click', function(e) {
-            const rect = img.getBoundingClientRect();
-            
-            // Mouse position relative to image
-            const x_pixel = e.clientX - rect.left;
-            const y_pixel = e.clientY - rect.top;
-
-            // Mapping to standard PC Resolution (Yahan apna PC resolution dalein agar galat click ho)
-            // Default 1920x1080 assume kar rahe hain, python code se width/height le sakte hain
-            const pc_width = 1920; 
-            const pc_height = 1080;
-
-            const final_x = Math.round((x_pixel / rect.width) * pc_width);
-            const final_y = Math.round((y_pixel / rect.height) * pc_height);
-
-            document.getElementById('coords').innerText = `X: ${final_x}, Y: ${final_y}`;
-
-            // Visual Dot
-            dot.style.display = 'block';
-            dot.style.left = x_pixel + 'px';
-            dot.style.top = y_pixel + 'px';
-
-            // Send to Telegram
-            sendCommand(`/click ${final_x} ${final_y}`);
-        });
-
-        function sendType() {
-            const text = document.getElementById('typeInput').value;
-            if(text) {
-                sendCommand(`/type ${text}`);
-                document.getElementById('typeInput').value = '';
-            }
-        }
-
-        function sendCommand(cmd) {
-            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(cmd)}`)
-            .then(res => {
-                console.log("Command Sent");
-                // Click ke baad 2 sec baad refresh
-                setTimeout(refreshImage, 2000);
-            });
-        }
-    </script>
+    <!-- External Script Integration -->
+    <script src="script.js"></script>
 </body>
 </html>
