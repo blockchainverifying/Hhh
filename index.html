@@ -4,268 +4,644 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sainfoxiya | B2B Gift Card Distribution</title>
+    <meta name="description" content="Sainfoxiya — India's most reliable B2B gift card wholesale platform. Bulk purchasing, API integration, Apple, Steam, PUBG, Binance and 1000+ gift cards in INR, USD, AED.">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-        
+        :root {
+            --blue: #2563eb;
+            --blue-dark: #1d4ed8;
+            --ink: #0f172a;
+            --slate: #64748b;
+            --surface: #f8fafc;
+        }
+
+        * { box-sizing: border-box; }
+
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'DM Sans', sans-serif;
+            background: white;
+            color: var(--ink);
             scroll-behavior: smooth;
+            overflow-x: hidden;
         }
 
+        h1, h2, h3, h4, nav a, .font-display { font-family: 'Syne', sans-serif; }
+
+        /* ── Nav ─────────────────────────────────── */
         .glass-nav {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(0,0,0,0.06);
         }
 
-        .hero-gradient {
-            background: radial-gradient(circle at top right, #f0f7ff 0%, #ffffff 100%);
+        /* ── Mobile Menu ─────────────────────────── */
+        #mobile-menu {
+            display: none;
+            position: fixed;
+            inset: 0;
+            top: 80px;
+            background: white;
+            z-index: 49;
+            padding: 2rem;
+            flex-direction: column;
+            gap: 1.5rem;
+            border-top: 1px solid #e2e8f0;
+        }
+        #mobile-menu.open { display: flex; }
+
+        /* ── Hero ─────────────────────────────────── */
+        .hero-bg {
+            background: radial-gradient(ellipse 80% 60% at 60% -10%, #dbeafe 0%, #ffffff 70%);
         }
 
-        .card-hover {
-            transition: all 0.3s ease;
+        /* ── Card hover ──────────────────────────── */
+        .brand-card {
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
         }
-
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
-        }
-
-        .badge-pulse {
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+        .brand-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px -12px rgba(37,99,235,0.15);
         }
 
         .currency-tag {
             background: #e2e8f0;
-            padding: 2px 8px;
+            padding: 2px 7px;
             border-radius: 4px;
-            font-size: 0.7rem;
-            font-weight: 700;
+            font-size: 0.65rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            font-family: 'Syne', sans-serif;
         }
 
-        /* Popup Styles */
+        /* ── Pulse badge ─────────────────────────── */
+        @keyframes softpulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(37,99,235,0.3); }
+            50% { box-shadow: 0 0 0 10px rgba(37,99,235,0); }
+        }
+        .badge-pulse { animation: softpulse 2.5s infinite; }
+
+        /* ── Popup ───────────────────────────────── */
         #global-popup {
             display: none;
             position: fixed;
             inset: 0;
-            z-index: 100;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(4px);
+            z-index: 200;
+            background: rgba(15,23,42,0.6);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
             align-items: center;
             justify-content: center;
             padding: 20px;
         }
+        #global-popup.open { display: flex; }
 
         .popup-content {
             background: white;
             width: 100%;
-            max-width: 700px;
-            max-height: 80vh;
+            max-width: 640px;
+            max-height: 88vh;
             border-radius: 24px;
             position: relative;
             overflow-y: auto;
+            overscroll-behavior: contain;
             padding: 40px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 32px 64px -16px rgba(0,0,0,0.3);
+            animation: popIn 0.25s cubic-bezier(0.34,1.56,0.64,1);
         }
+
+        @keyframes popIn {
+            from { transform: scale(0.92); opacity: 0; }
+            to   { transform: scale(1);    opacity: 1; }
+        }
+
+        /* ── Scroll reveal ───────────────────────── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.55s ease, transform 0.55s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        /* ── Section divider ─────────────────────── */
+        .section-chip {
+            display: inline-block;
+            background: #eff6ff;
+            color: #1d4ed8;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 4px 14px;
+            border-radius: 99px;
+            font-family: 'Syne', sans-serif;
+            margin-bottom: 1rem;
+        }
+
+        /* ── Toast notification ──────────────────── */
+        #toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: #0f172a;
+            color: white;
+            padding: 14px 28px;
+            border-radius: 99px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            z-index: 300;
+            transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+            pointer-events: none;
+            white-space: nowrap;
+        }
+        #toast.show { transform: translateX(-50%) translateY(0); }
     </style>
 </head>
-<body class="bg-white text-slate-900">
+<body>
 
-    <!-- Navigation -->
-    <nav class="glass-nav fixed w-full z-50 top-0">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-20 items-center">
-                <div class="flex items-center">
-                    <span class="text-2xl font-bold tracking-tight text-blue-600 uppercase">SAINFOXIYA</span>
-                </div>
-                <div class="hidden md:flex space-x-8 font-medium text-sm uppercase tracking-wider">
-                    <a href="#home" class="hover:text-blue-600 transition">Home</a>
-                    <a href="#cards" class="hover:text-blue-600 transition">Gift Cards</a>
-                    <a href="#partnership" class="hover:text-blue-600 transition text-blue-600 font-bold">Partner With Us</a>
-                </div>
-            </div>
-        </div>
-    </nav>
+<!-- ════════════════════════════════════════
+     NAVIGATION
+════════════════════════════════════════ -->
+<nav class="glass-nav fixed w-full z-50 top-0">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8">
+        <div class="flex justify-between h-20 items-center">
 
-    <!-- Hero Section -->
-    <section id="home" class="hero-gradient pt-32 pb-20 px-4">
-        <div class="max-w-7xl mx-auto text-center">
-            <span class="inline-block py-1 px-3 bg-blue-50 text-blue-700 text-xs font-bold rounded-full mb-6 uppercase tracking-widest text-sm">Premium B2B Solutions</span>
-            <h1 class="text-4xl md:text-6xl font-bold text-slate-900 mb-6 leading-tight">
-                Empowering Businesses with <br><span class="text-blue-600">Global Gift Card Infrastructure</span>
-            </h1>
-            <p class="text-lg text-slate-600 max-w-2xl mx-auto mb-10">
-                Sainfoxiya provides seamless API integration and bulk purchasing for global gift cards. Partner with us to scale your digital inventory across multiple regions.
-            </p>
-            
-            <div class="mb-10 flex flex-wrap justify-center gap-4">
-                <div class="bg-blue-600 text-white px-6 py-3 rounded-full font-bold shadow-lg badge-pulse flex items-center gap-2">
-                    <i class="fas fa-layer-group"></i>
-                    1000+ Gift Cards
-                </div>
-                <div class="bg-slate-900 text-white px-6 py-3 rounded-full font-bold flex items-center gap-3">
-                    <span class="text-xs opacity-70 uppercase">Supported:</span>
-                    <span class="text-sm">INR</span>
-                    <span class="opacity-30">|</span>
-                    <span class="text-sm">USD</span>
-                    <span class="opacity-30">|</span>
-                    <span class="text-sm">AED</span>
-                </div>
+            <a href="#home" class="text-xl font-display font-bold tracking-tight text-blue-600 uppercase" style="font-family:'Syne',sans-serif">
+                SAINFOXIYA
+            </a>
+
+            <!-- Desktop links -->
+            <div class="hidden md:flex items-center gap-8 text-sm font-semibold" style="font-family:'Syne',sans-serif">
+                <a href="#home"        class="text-slate-500 hover:text-blue-600 transition uppercase tracking-wide">Home</a>
+                <a href="#cards"       class="text-slate-500 hover:text-blue-600 transition uppercase tracking-wide">Gift Cards</a>
+                <a href="#partnership" class="text-slate-500 hover:text-blue-600 transition uppercase tracking-wide">Partner</a>
+                <button onclick="openPopup('merchant')"
+                        class="px-5 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition text-sm font-bold shadow-md shadow-blue-200">
+                    Merchant Login
+                </button>
             </div>
 
-            <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="#partnership" class="px-8 py-4 bg-slate-900 text-white rounded-lg font-semibold hover:bg-slate-800 transition shadow-lg">Become a Partner</a>
-                <a href="#cards" class="px-8 py-4 bg-white border border-slate-200 text-slate-700 rounded-lg font-semibold hover:bg-slate-50 transition">View Catalog</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Brands Section -->
-    <section id="cards" class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold mb-4">Top Global Brands</h2>
-                <p class="text-slate-500">Access our massive catalog of gaming, entertainment, and e-commerce cards.</p>
-            </div>
-            
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                <!-- Apple -->
-                <div class="bg-slate-50 p-8 rounded-2xl flex flex-col items-center card-hover text-center relative">
-                    <div class="absolute top-4 right-4 flex gap-1">
-                        <span class="currency-tag">INR</span><span class="currency-tag">USD</span>
-                    </div>
-                    <i class="fab fa-apple text-4xl mb-4"></i>
-                    <h3 class="font-bold">Apple Gift Card</h3>
-                    <p class="text-xs text-blue-600 font-semibold mt-2">App Store & Music</p>
-                </div>
-                <!-- Binance -->
-                <div class="bg-slate-50 p-8 rounded-2xl flex flex-col items-center card-hover text-center relative">
-                    <div class="absolute top-4 right-4 flex gap-1">
-                        <span class="currency-tag">USDT</span><span class="currency-tag">AED</span>
-                    </div>
-                    <i class="fas fa-coins text-4xl mb-4 text-yellow-500"></i>
-                    <h3 class="font-bold">Binance Gift Card</h3>
-                    <p class="text-xs text-blue-600 font-semibold mt-2">Instant Crypto Redeem</p>
-                </div>
-                <!-- PUBG -->
-                <div class="bg-slate-50 p-8 rounded-2xl flex flex-col items-center card-hover text-center relative">
-                    <div class="absolute top-4 right-4 flex gap-1">
-                        <span class="currency-tag">GLOBAL</span>
-                    </div>
-                    <i class="fas fa-gamepad text-4xl mb-4 text-orange-500"></i>
-                    <h3 class="font-bold">PUBG Mobile</h3>
-                    <p class="text-xs text-blue-600 font-semibold mt-2">UC Topup/Codes</p>
-                </div>
-                <!-- Razer -->
-                <div class="bg-slate-50 p-8 rounded-2xl flex flex-col items-center card-hover text-center relative">
-                    <div class="absolute top-4 right-4 flex gap-1">
-                        <span class="currency-tag">INR</span><span class="currency-tag">USD</span>
-                    </div>
-                    <i class="fas fa-bolt text-4xl mb-4 text-green-500"></i>
-                    <h3 class="font-bold">Razer Gold</h3>
-                    <p class="text-xs text-blue-600 font-semibold mt-2">Bulk PINs Available</p>
-                </div>
-                <!-- Steam -->
-                <div class="bg-slate-50 p-8 rounded-2xl flex flex-col items-center card-hover text-center relative">
-                    <div class="absolute top-4 right-4 flex gap-1">
-                        <span class="currency-tag">AED</span><span class="currency-tag">USD</span>
-                    </div>
-                    <i class="fab fa-steam text-4xl mb-4 text-slate-700"></i>
-                    <h3 class="font-bold">Steam Wallet</h3>
-                    <p class="text-xs text-blue-600 font-semibold mt-2">Regional & Global</p>
-                </div>
-                <!-- PSN -->
-                <div class="bg-slate-50 p-8 rounded-2xl flex flex-col items-center card-hover text-center relative">
-                    <div class="absolute top-4 right-4 flex gap-1">
-                        <span class="currency-tag">INR</span><span class="currency-tag">AED</span>
-                    </div>
-                    <i class="fab fa-playstation text-4xl mb-4 text-blue-700"></i>
-                    <h3 class="font-bold">PlayStation</h3>
-                    <p class="text-xs text-blue-600 font-semibold mt-2">Store Credits</p>
-                </div>
-            </div>
-            
-            <div class="mt-16 text-center">
-                <p class="text-slate-600 italic">...and 1,000+ more across all major digital categories.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Partnership Section -->
-    <section id="partnership" class="py-20 bg-slate-50">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="grid md:grid-cols-2 gap-12 items-center">
-                <div>
-                    <h2 class="text-3xl font-bold mb-6 text-slate-900">Partner with Sainfoxiya</h2>
-                    <p class="text-slate-600 mb-8">Join India's most reliable B2B gift card network. Start your journey with automated delivery and best-in-market pricing.</p>
-                    <ul class="space-y-4">
-                        <li class="flex items-center gap-3 text-slate-700 font-medium"><i class="fas fa-check-circle text-blue-600"></i> Instant Wholesale Access</li>
-                        <li class="flex items-center gap-3 text-slate-700 font-medium"><i class="fas fa-check-circle text-blue-600"></i> API Documentation Ready</li>
-                        <li class="flex items-center gap-3 text-slate-700 font-medium"><i class="fas fa-check-circle text-blue-600"></i> Dedicated Support Manager</li>
-                    </ul>
-                </div>
-                <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-100">
-                    <div class="space-y-4">
-                        <input type="text" placeholder="Full Name / Company Name" class="w-full p-4 rounded-xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-blue-600 outline-none">
-                        <input type="email" placeholder="Business Email" class="w-full p-4 rounded-xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-blue-600 outline-none">
-                        <button class="w-full py-4 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition">Apply Now</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-slate-900 text-white py-16 px-4">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid md:grid-cols-3 gap-12 mb-12 border-b border-slate-800 pb-12">
-                <div class="col-span-1 md:col-span-1">
-                    <h2 class="text-2xl font-bold text-blue-400 mb-4 uppercase">SAINFOXIYA</h2>
-                    <p class="text-slate-400">Premium B2B Gift Card Distribution. Secure, reliable, and global.</p>
-                </div>
-                <div>
-                    <h4 class="font-bold mb-6 text-slate-500 uppercase text-xs tracking-widest">Legal & Info</h4>
-                    <ul class="space-y-4">
-                        <li><button onclick="openPopup('privacy')" class="text-slate-400 hover:text-white transition">Privacy Policy</button></li>
-                        <li><button onclick="openPopup('whatsapp')" class="text-green-400 hover:text-green-300 font-bold transition flex items-center gap-2"><i class="fab fa-whatsapp"></i> Whatsapp Support</button></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-bold mb-6 text-slate-500 uppercase text-xs tracking-widest">Support & Sales</h4>
-                    <ul class="space-y-4">
-                        <li><button onclick="openPopup('help')" class="text-slate-400 hover:text-white transition">Help Centre</button></li>
-                        <li><button onclick="openPopup('merchant')" class="text-slate-400 hover:text-white transition">Merchant Login</button></li>
-                        <li><button onclick="openPopup('sales')" class="text-blue-400 hover:text-blue-300 font-bold transition">Contact Sale</button></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="text-center text-slate-500 text-sm">
-                <p>&copy; 2024 Sainfoxiya. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Dynamic Popup Container -->
-    <div id="global-popup">
-        <div class="popup-content">
-            <button onclick="closePopup()" class="absolute top-6 right-6 text-slate-400 hover:text-slate-900 transition text-2xl">
-                <i class="fas fa-times"></i>
+            <!-- Mobile hamburger -->
+            <button id="hamburger" onclick="toggleMobileMenu()" class="md:hidden w-10 h-10 flex flex-col justify-center items-center gap-1.5" aria-label="Toggle menu">
+                <span id="ham-1" class="w-6 h-0.5 bg-slate-700 transition-all duration-300 origin-center"></span>
+                <span id="ham-2" class="w-6 h-0.5 bg-slate-700 transition-all duration-300"></span>
+                <span id="ham-3" class="w-6 h-0.5 bg-slate-700 transition-all duration-300 origin-center"></span>
             </button>
-            <div id="popup-inner-content">
-                <!-- Content injected from script.js -->
+        </div>
+    </div>
+</nav>
+
+<!-- Mobile menu dropdown -->
+<div id="mobile-menu">
+    <a href="#home"        onclick="closeMobileMenu()" class="text-xl font-bold text-slate-800 hover:text-blue-600 transition" style="font-family:'Syne',sans-serif">Home</a>
+    <a href="#cards"       onclick="closeMobileMenu()" class="text-xl font-bold text-slate-800 hover:text-blue-600 transition" style="font-family:'Syne',sans-serif">Gift Cards</a>
+    <a href="#partnership" onclick="closeMobileMenu()" class="text-xl font-bold text-slate-800 hover:text-blue-600 transition" style="font-family:'Syne',sans-serif">Partner With Us</a>
+    <button onclick="closeMobileMenu(); openPopup('merchant')"
+            class="w-full py-4 bg-blue-600 text-white font-bold rounded-2xl text-lg shadow-lg hover:bg-blue-700 transition" style="font-family:'Syne',sans-serif">
+        Merchant Login
+    </button>
+    <button onclick="closeMobileMenu(); openPopup('whatsapp')"
+            class="w-full py-4 bg-green-500 text-white font-bold rounded-2xl text-lg shadow-lg hover:bg-green-600 transition flex items-center justify-center gap-2" style="font-family:'Syne',sans-serif">
+        <i class="fab fa-whatsapp"></i> WhatsApp Support
+    </button>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     HERO
+════════════════════════════════════════ -->
+<section id="home" class="hero-bg pt-36 pb-24 px-5">
+    <div class="max-w-7xl mx-auto text-center">
+
+        <div class="section-chip reveal">Premium B2B Solutions</div>
+
+        <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold text-slate-900 mb-6 leading-tight reveal" style="transition-delay:0.1s">
+            Empowering Businesses<br>
+            <span class="text-blue-600">with Gift Card Infrastructure</span>
+        </h1>
+
+        <p class="text-lg text-slate-500 max-w-xl mx-auto mb-10 reveal" style="transition-delay:0.2s; font-family:'DM Sans',sans-serif; font-weight:300">
+            Bulk purchasing, API integration, and instant delivery across 1000+ global gift cards — INR, USD, AED.
+        </p>
+
+        <div class="flex flex-wrap justify-center gap-3 mb-10 reveal" style="transition-delay:0.3s">
+            <div class="badge-pulse bg-blue-600 text-white px-6 py-3 rounded-full font-bold text-sm flex items-center gap-2 shadow-lg shadow-blue-200">
+                <i class="fas fa-layer-group"></i> 1000+ Gift Cards
+            </div>
+            <div class="bg-slate-900 text-white px-6 py-3 rounded-full font-bold text-sm flex items-center gap-3">
+                <span class="opacity-50 text-xs uppercase tracking-wider">Currencies:</span>
+                <span>INR</span><span class="opacity-30">·</span>
+                <span>USD</span><span class="opacity-30">·</span>
+                <span>AED</span>
+            </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row justify-center gap-4 reveal" style="transition-delay:0.4s">
+            <a href="#partnership" class="px-8 py-4 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition shadow-xl">
+                Become a Partner
+            </a>
+            <a href="#cards" class="px-8 py-4 bg-white border-2 border-slate-200 text-slate-700 rounded-xl font-bold hover:bg-slate-50 transition">
+                View Catalog
+            </a>
+        </div>
+    </div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     BRANDS CATALOG
+════════════════════════════════════════ -->
+<section id="cards" class="py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-5">
+        <div class="text-center mb-16 reveal">
+            <div class="section-chip">Top Brands</div>
+            <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mt-2">Global Gift Card Catalog</h2>
+            <p class="text-slate-500 mt-3">Gaming, entertainment, crypto, and e-commerce — all in one platform.</p>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+
+            <div class="brand-card bg-slate-50 p-8 rounded-2xl flex flex-col items-center text-center relative reveal">
+                <div class="absolute top-4 right-4 flex gap-1"><span class="currency-tag">INR</span><span class="currency-tag">USD</span></div>
+                <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-md mb-4">
+                    <i class="fab fa-apple text-2xl text-slate-800"></i>
+                </div>
+                <h3 class="font-bold text-slate-900">Apple Gift Card</h3>
+                <p class="text-xs text-blue-600 font-semibold mt-1">App Store & iTunes</p>
+            </div>
+
+            <div class="brand-card bg-slate-50 p-8 rounded-2xl flex flex-col items-center text-center relative reveal" style="transition-delay:0.05s">
+                <div class="absolute top-4 right-4 flex gap-1"><span class="currency-tag">USDT</span><span class="currency-tag">AED</span></div>
+                <div class="w-14 h-14 bg-yellow-50 rounded-2xl flex items-center justify-center shadow-md mb-4">
+                    <i class="fas fa-coins text-2xl text-yellow-500"></i>
+                </div>
+                <h3 class="font-bold text-slate-900">Binance Gift Card</h3>
+                <p class="text-xs text-blue-600 font-semibold mt-1">Instant Crypto Redeem</p>
+            </div>
+
+            <div class="brand-card bg-slate-50 p-8 rounded-2xl flex flex-col items-center text-center relative reveal" style="transition-delay:0.1s">
+                <div class="absolute top-4 right-4"><span class="currency-tag">GLOBAL</span></div>
+                <div class="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center shadow-md mb-4">
+                    <i class="fas fa-gamepad text-2xl text-orange-500"></i>
+                </div>
+                <h3 class="font-bold text-slate-900">PUBG Mobile</h3>
+                <p class="text-xs text-blue-600 font-semibold mt-1">UC Topup / Codes</p>
+            </div>
+
+            <div class="brand-card bg-slate-50 p-8 rounded-2xl flex flex-col items-center text-center relative reveal" style="transition-delay:0.15s">
+                <div class="absolute top-4 right-4 flex gap-1"><span class="currency-tag">INR</span><span class="currency-tag">USD</span></div>
+                <div class="w-14 h-14 bg-green-50 rounded-2xl flex items-center justify-center shadow-md mb-4">
+                    <i class="fas fa-bolt text-2xl text-green-500"></i>
+                </div>
+                <h3 class="font-bold text-slate-900">Razer Gold</h3>
+                <p class="text-xs text-blue-600 font-semibold mt-1">Bulk PINs Available</p>
+            </div>
+
+            <div class="brand-card bg-slate-50 p-8 rounded-2xl flex flex-col items-center text-center relative reveal" style="transition-delay:0.2s">
+                <div class="absolute top-4 right-4 flex gap-1"><span class="currency-tag">AED</span><span class="currency-tag">USD</span></div>
+                <div class="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center shadow-md mb-4">
+                    <i class="fab fa-steam text-2xl text-slate-700"></i>
+                </div>
+                <h3 class="font-bold text-slate-900">Steam Wallet</h3>
+                <p class="text-xs text-blue-600 font-semibold mt-1">Regional & Global</p>
+            </div>
+
+            <div class="brand-card bg-slate-50 p-8 rounded-2xl flex flex-col items-center text-center relative reveal" style="transition-delay:0.25s">
+                <div class="absolute top-4 right-4 flex gap-1"><span class="currency-tag">INR</span><span class="currency-tag">AED</span></div>
+                <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center shadow-md mb-4">
+                    <i class="fab fa-playstation text-2xl text-blue-700"></i>
+                </div>
+                <h3 class="font-bold text-slate-900">PlayStation</h3>
+                <p class="text-xs text-blue-600 font-semibold mt-1">Store Credits</p>
+            </div>
+        </div>
+
+        <p class="text-center text-slate-400 mt-12 text-sm italic reveal">…and 1,000+ more across gaming, entertainment & e-commerce.</p>
+    </div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     PARTNERSHIP
+════════════════════════════════════════ -->
+<section id="partnership" class="py-24 bg-slate-50">
+    <div class="max-w-7xl mx-auto px-5">
+        <div class="grid md:grid-cols-2 gap-16 items-center">
+
+            <div class="reveal">
+                <div class="section-chip">Join Us</div>
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mt-2 mb-5">Partner with Sainfoxiya</h2>
+                <p class="text-slate-500 mb-8" style="font-weight:300">Join India's most reliable B2B gift card network. Automated delivery, real-time inventory, and best-in-market pricing.</p>
+                <ul class="space-y-4">
+                    <li class="flex items-center gap-3 font-semibold text-slate-700">
+                        <span class="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0"><i class="fas fa-check text-blue-600 text-xs"></i></span>
+                        Instant Wholesale Access
+                    </li>
+                    <li class="flex items-center gap-3 font-semibold text-slate-700">
+                        <span class="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0"><i class="fas fa-check text-blue-600 text-xs"></i></span>
+                        API Documentation Ready
+                    </li>
+                    <li class="flex items-center gap-3 font-semibold text-slate-700">
+                        <span class="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0"><i class="fas fa-check text-blue-600 text-xs"></i></span>
+                        Dedicated Support Manager
+                    </li>
+                </ul>
+            </div>
+
+            <!-- FIX: Partner form now actually submits (mailto fallback + toast feedback) -->
+            <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-100 reveal" style="transition-delay:0.15s">
+                <h3 class="text-xl font-bold text-slate-900 mb-6">Apply for Partnership</h3>
+                <div class="space-y-4">
+                    <input type="text" id="partner-name" placeholder="Full Name / Company Name"
+                           class="w-full p-4 rounded-xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition text-sm">
+                    <input type="email" id="partner-email" placeholder="Business Email"
+                           class="w-full p-4 rounded-xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition text-sm">
+                    <input type="tel" id="partner-phone" placeholder="WhatsApp / Phone Number"
+                           class="w-full p-4 rounded-xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition text-sm">
+                    <button onclick="submitPartnerForm()"
+                            id="apply-btn"
+                            class="w-full py-4 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition shadow-lg shadow-blue-200 text-sm">
+                        Apply Now →
+                    </button>
+                </div>
+                <p class="text-center text-xs text-slate-400 mt-4">We respond within 24 working hours.</p>
             </div>
         </div>
     </div>
+</section>
 
-    <!-- External Script Integration -->
-    <script src="script.js"></script>
+
+<!-- ════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════ -->
+<footer class="bg-slate-900 text-white py-16 px-5">
+    <div class="max-w-7xl mx-auto">
+        <div class="grid md:grid-cols-3 gap-12 mb-12 border-b border-slate-800 pb-12">
+            <div>
+                <h2 class="text-xl font-bold text-blue-400 mb-3 uppercase" style="font-family:'Syne',sans-serif">SAINFOXIYA</h2>
+                <p class="text-slate-400 text-sm leading-relaxed">Premium B2B Gift Card Distribution. Secure, reliable, and global across INR, USD & AED markets.</p>
+            </div>
+            <div>
+                <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-5" style="font-family:'Syne',sans-serif">Legal & Info</h4>
+                <ul class="space-y-3">
+                    <li><button onclick="openPopup('privacy')" class="text-slate-400 hover:text-white transition text-sm">Privacy Policy</button></li>
+                    <li>
+                        <button onclick="openPopup('whatsapp')" class="text-green-400 hover:text-green-300 font-semibold transition flex items-center gap-2 text-sm">
+                            <i class="fab fa-whatsapp"></i> WhatsApp Support
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-5" style="font-family:'Syne',sans-serif">Support & Sales</h4>
+                <ul class="space-y-3">
+                    <li><button onclick="openPopup('help')"     class="text-slate-400 hover:text-white transition text-sm">Help Centre</button></li>
+                    <li><button onclick="openPopup('merchant')" class="text-slate-400 hover:text-white transition text-sm">Merchant Login</button></li>
+                    <li><button onclick="openPopup('sales')"    class="text-blue-400 hover:text-blue-300 font-semibold transition text-sm">Contact Sales</button></li>
+                </ul>
+            </div>
+        </div>
+        <div class="text-center text-slate-600 text-xs">
+            &copy; <span id="footer-year"></span> Sainfoxiya. All rights reserved.
+        </div>
+    </div>
+</footer>
+
+
+<!-- ════════════════════════════════════════
+     POPUP CONTAINER
+════════════════════════════════════════ -->
+<div id="global-popup">
+    <div class="popup-content">
+        <button onclick="closePopup()"
+                class="absolute top-5 right-5 w-9 h-9 bg-slate-100 hover:bg-slate-200 rounded-full flex items-center justify-center text-slate-500 hover:text-slate-900 transition">
+            <i class="fas fa-times text-sm"></i>
+        </button>
+        <div id="popup-inner-content"></div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<!-- ════════════════════════════════════════
+     SCRIPT (landing.js inlined)
+     Note: renamed from script.js to avoid conflict with merchant portal's script.js
+════════════════════════════════════════ -->
+<script>
+/* ── Popup data ─────────────────────────────────── */
+const popupData = {
+    privacy: {
+        title: "Privacy Policy",
+        content: `
+            <div class="space-y-4 text-sm">
+                <p class="text-slate-500">Sainfoxiya prioritises the security of your data. We never share your business information with third parties under any circumstances.</p>
+                <ul class="space-y-3">
+                    <li class="flex gap-3 items-start"><span class="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"><i class="fas fa-check text-blue-600 text-[10px]"></i></span><span class="text-slate-600">All data is encrypted and transmitted over SSL.</span></li>
+                    <li class="flex gap-3 items-start"><span class="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"><i class="fas fa-check text-blue-600 text-[10px]"></i></span><span class="text-slate-600">Order and transaction details remain 100% confidential.</span></li>
+                    <li class="flex gap-3 items-start"><span class="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"><i class="fas fa-check text-blue-600 text-[10px]"></i></span><span class="text-slate-600">We only collect information required for legal verification purposes.</span></li>
+                </ul>
+                <p class="text-xs text-slate-400 pt-4 border-t border-slate-100">Last Updated: March 2025</p>
+            </div>
+        `
+    },
+    help: {
+        title: "Help Centre",
+        content: `
+            <div class="space-y-4">
+                <div class="p-5 bg-slate-50 rounded-2xl border border-slate-200">
+                    <h4 class="font-bold text-blue-600 mb-2">Order Delay Issues?</h4>
+                    <p class="text-sm text-slate-600">If your code hasn't arrived within 5 minutes, please check the "Transactions" section in your dashboard or contact us on WhatsApp.</p>
+                </div>
+                <div class="p-5 bg-slate-50 rounded-2xl border border-slate-200">
+                    <h4 class="font-bold text-blue-600 mb-2">Topup Not Credited?</h4>
+                    <p class="text-sm text-slate-600">Share your UTR number or payment screenshot on WhatsApp. Our admin will verify and credit your balance within 30 minutes.</p>
+                </div>
+                <div class="p-5 bg-slate-50 rounded-2xl border border-slate-200">
+                    <h4 class="font-bold text-blue-600 mb-2">API Integration</h4>
+                    <p class="text-sm text-slate-600">Our API documentation portal is available exclusively for approved partners. Please contact the sales team to get access.</p>
+                </div>
+                <button onclick="openPopup('whatsapp')" class="w-full py-3 bg-green-500 text-white rounded-xl font-bold hover:bg-green-600 transition text-sm">
+                    <i class="fab fa-whatsapp mr-2"></i> Chat on WhatsApp
+                </button>
+            </div>
+        `
+    },
+    merchant: {
+        title: "Merchant Login",
+        content: `
+            <div class="text-center py-4">
+                <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-5">
+                    <i class="fas fa-store text-blue-600 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 mb-2">Merchant Dashboard</h3>
+                <p class="text-slate-500 text-sm mb-8">Sign in to your B2B merchant account to purchase and manage gift cards.</p>
+                <a href="/merchant/index.html"
+                   class="w-full block py-4 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition shadow-lg shadow-blue-200 text-sm mb-4">
+                    Go to Merchant Portal →
+                </a>
+                <p class="text-xs text-slate-400">Don't have an account? <button onclick="openPopup('sales')" class="text-blue-500 hover:underline font-semibold">Become a partner →</button></p>
+            </div>
+        `
+    },
+    sales: {
+        title: "Contact Sales",
+        content: `
+            <div class="space-y-5">
+                <p class="text-slate-500 text-sm">Handling ₹5,00,000+ per month in volume? Contact us directly for special bulk pricing and dedicated account management.</p>
+                <div class="bg-blue-50 p-5 rounded-2xl border border-blue-100 space-y-3">
+                    <div>
+                        <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Official Email</p>
+                        <a href="mailto:sales@sainfoxiya.com" class="text-blue-600 font-semibold hover:underline text-sm">sales@sainfoxiya.com</a>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Response Time</p>
+                        <p class="text-slate-700 font-medium text-sm">Under 24 Working Hours</p>
+                    </div>
+                </div>
+                <button onclick="openPopup('whatsapp')" class="w-full py-3 bg-green-500 text-white rounded-xl font-bold hover:bg-green-600 transition text-sm">
+                    <i class="fab fa-whatsapp mr-2"></i> Faster: Chat on WhatsApp
+                </button>
+            </div>
+        `
+    },
+    whatsapp: {
+        title: "WhatsApp Support",
+        content: `
+            <div class="text-center py-4">
+                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-5">
+                    <i class="fab fa-whatsapp text-green-500 text-4xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 mb-2">Instant B2B Support</h3>
+                <p class="text-slate-500 text-sm mb-8">Our support agents are live and ready to help with codes, topups, orders, and anything else you need.</p>
+                <!-- FIX: Replace +919999999999 with your actual WhatsApp business number -->
+                <a href="https://wa.me/919999999999?text=Hello%20Sainfoxiya%2C%20I%20need%20support."
+                   target="_blank" rel="noopener"
+                   class="inline-block w-full py-4 bg-green-500 text-white font-bold rounded-xl hover:bg-green-600 transition shadow-lg text-sm">
+                    <i class="fab fa-whatsapp mr-2"></i> Open WhatsApp Chat
+                </a>
+                <p class="text-xs text-slate-400 mt-4">Available Mon–Sat, 10am–8pm IST</p>
+            </div>
+        `
+    }
+};
+
+/* ── Popup open/close ─────────────────────────── */
+function openPopup(key) {
+    const data = popupData[key];
+    if (!data) return;
+
+    document.getElementById('popup-inner-content').innerHTML = `
+        <h2 class="text-2xl font-bold text-slate-900 mb-6" style="font-family:'Syne',sans-serif">${data.title}</h2>
+        ${data.content}
+    `;
+
+    // FIX: use class toggle instead of style.display to avoid CSS specificity issues
+    document.getElementById('global-popup').classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+
+function closePopup() {
+    document.getElementById('global-popup').classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+// FIX: use addEventListener instead of window.onclick override
+document.getElementById('global-popup').addEventListener('click', function(e) {
+    if (e.target === this) closePopup();
+});
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closePopup();
+});
+
+/* ── Mobile menu ──────────────────────────────── */
+function toggleMobileMenu() {
+    const menu = document.getElementById('mobile-menu');
+    const h1   = document.getElementById('ham-1');
+    const h2   = document.getElementById('ham-2');
+    const h3   = document.getElementById('ham-3');
+    const open = menu.classList.toggle('open');
+
+    if (open) {
+        h1.style.transform = 'rotate(45deg) translate(4px, 4px)';
+        h2.style.opacity   = '0';
+        h3.style.transform = 'rotate(-45deg) translate(4px, -4px)';
+        document.body.style.overflow = 'hidden';
+    } else {
+        h1.style.transform = '';
+        h2.style.opacity   = '1';
+        h3.style.transform = '';
+        document.body.style.overflow = '';
+    }
+}
+
+function closeMobileMenu() {
+    document.getElementById('mobile-menu').classList.remove('open');
+    document.getElementById('ham-1').style.transform = '';
+    document.getElementById('ham-2').style.opacity   = '1';
+    document.getElementById('ham-3').style.transform = '';
+    document.body.style.overflow = '';
+}
+
+/* ── Toast ────────────────────────────────────── */
+function showToast(msg, duration = 3000) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), duration);
+}
+
+/* ── FIX: Partner form — validates + sends via mailto ─ */
+function submitPartnerForm() {
+    const name  = document.getElementById('partner-name').value.trim();
+    const email = document.getElementById('partner-email').value.trim();
+    const phone = document.getElementById('partner-phone').value.trim();
+
+    if (!name)  { showToast('⚠ Please enter your name.'); return; }
+    if (!email || !email.includes('@')) { showToast('⚠ Please enter a valid email.'); return; }
+    if (!phone) { showToast('⚠ Please enter your phone number.'); return; }
+
+    const btn = document.getElementById('apply-btn');
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+
+    // Build mailto link as fallback (no backend needed)
+    const subject = encodeURIComponent(`Partnership Inquiry — ${name}`);
+    const body    = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nPhone: ${phone}\n\nKindly onboard me as a merchant partner.`);
+    window.location.href = `mailto:sales@sainfoxiya.com?subject=${subject}&body=${body}`;
+
+    setTimeout(() => {
+        btn.disabled = false;
+        btn.textContent = 'Apply Now →';
+        document.getElementById('partner-name').value  = '';
+        document.getElementById('partner-email').value = '';
+        document.getElementById('partner-phone').value = '';
+        showToast('✓ Opening your email client…');
+    }, 1200);
+}
+
+/* ── FIX: Auto copyright year ─────────────────── */
+document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+/* ── Scroll reveal ────────────────────────────── */
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
 </body>
 </html>
+
